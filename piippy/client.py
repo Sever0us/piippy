@@ -11,6 +11,7 @@ def find_server():
     while not server:
         print('Finding server...')
         for i in range(256):
+            print(i)
             if test_if_server('.'.join([a, b, c, str(i)])):
                 return '.'.join([a, b, c, str(i)])
 
@@ -29,7 +30,7 @@ def test_if_server(hostname):
 if __name__ == '__main__':
     print('Booting service...')
     serverIp = find_server()
-    address = 'http://' + serverIp + ':9600/log'
+    address = 'http://' + serverIp + ':9600/api/log'
     print('Logging...')
     while True:
         time.sleep(10)

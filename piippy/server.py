@@ -18,6 +18,8 @@ serverApp = Flask(__name__)
 cache = SimpleCache()
 serverIp = get_ip()
 
+clientDevices = {}
+
 
 class cached(object):
     '''
@@ -42,12 +44,32 @@ class cached(object):
 
 @serverApp.route('/api/clients', methods=['GET'])
 @cached()
-def get_identity():
-    return jsonify({'time': time.time()})
+def clients():
+    global clientDevices
+    return jsonify(clientDevices)
+
 
 @serverApp.route('/api/handshake', methods=['GET'])
 def handshake():
     return 'True'
+
+
+@serverApp.route('/api/log', methods=['POST'])
+def log():
+    p = request.form
+
+    ip = p['ip']
+    mac = p['mac']
+    t = time.time()
+
+    global clientDevices
+    clientDevices[mac] = {
+        'ip': ip,
+        'time': t
+    }
+
+    return 'True'
+
 
 if __name__ == '__main__':
     start_time = time.time()
